@@ -8,15 +8,17 @@ Created on Sat Jun  8 16:40:37 2024
 from flask import Flask
 app = Flask(__name__)
 
-from flask import request, abort
-from linebot import  LineBotApi, WebhookHandler
+from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage,TextSendMessage, ImageSendMessage, StickerSendMessage, LocationSendMessage, QuickReply, QuickReplyButton, MessageAction
+from linebot.models import MessageEvent, TextMessage, TextSendMessage
+import openai
 
 import os
 
 line_bot_api = LineBotApi(os.environ.get('Channel_Access_Token'))
 handler = WebhookHandler(os.environ.get('Channel_Secret'))
+
+openai.api_key = 'YOUR_OPENAI_API_KEY'
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -26,6 +28,17 @@ def callback():
         handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
+    return 'OK'
+
+def webhook():
+    signature = request.headers['X-Line-Signature']
+    body = request.get_data(as_text=True)
+    
+    try:
+        handler.handle(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+
     return 'OK'
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -116,6 +129,14 @@ def handle_message(event):
         except:
             line_bot_api.reply_message(event.reply_token,TextSendMessage(text='發生錯誤！'))
 
+def webhook():
+    signature = request.headers['X-Line-Signature']
+    body = request.get_data(as_text=True)
+    
+    try:
+        handler.handle(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+        
 if __name__ == '__main__':
     app.run()
-
