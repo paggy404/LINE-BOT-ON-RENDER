@@ -21,9 +21,9 @@ import google.generativeai as genai
 import os
 line_bot_api = LineBotApi(os.environ.get('Channel_Access_Token'))
 handler = WebhookHandler(os.environ.get('Channel_Secret'))
-# api_key = 'AIzaSyBmmMTdKrkPrvIAFJHMzoY-hViCEWElZQQ'
-# genai.configure(api_key = api_key)
-genai.configure_api_key = genai.configure(os.environ.get('Channel_Access_Api_Key'))
+
+api_key = 'AIzaSyBmmMTdKrkPrvIAFJHMzoY-hViCEWElZQQ'
+genai.configure(api_key = api_key)
 
 @app.route("/callback", methods=['POST'])
 def callback():
