@@ -58,7 +58,7 @@ def handle_message(event):
             line_bot_api.reply_message(event.reply_token,TextSendMessage(text='發生錯誤！'))
     # 取出文字的前五個字元是 hi ai:
     elif mtext[:4] ==  '我不舒服':
-        prompt="你是一個專業的皮膚科醫生，請用問診的方式幫我判斷我的皮膚有什麼症狀，根據以下內容給我溫柔平易近人回應:\n"+mtext[4:]
+        prompt="你是一個專業的皮膚科醫生，請用問診的方式幫我判斷我的皮膚有什麼症狀，根據以下內容給我溫柔平易近人給人溫暖窩心的回應:\n"+mtext[4:]
         model = genai.GenerativeModel('gemini-1.5-flash')
         response = model.generate_content(prompt)
         # try:
